@@ -11,9 +11,8 @@ client.on('message', message => {
     if (!message.content.startsWith(prefix) || message.author.bot)
         return;
     
-    const args = message.content.slice(prefix.length).trim().split('/ +/');
+    const args = message.content.slice(prefix.length).trim().split(/ +/);
     const command = args.shift().toLowerCase();
-
 
     if (message.content.startsWith(`${prefix}ping`)) {
         message.channel.send('Pong.');
@@ -51,6 +50,16 @@ client.on('message', message => {
         })
 
         message.channel.send(avatarList);
+    } else if (message.content.startsWith(`${prefix}prune`)) {
+        const amount = parseInt(args[0]);
+
+        if (isNaN(amount)) {
+            return message.reply('that doesn\'t seem to be a number.')
+        } else if (amount < 2 || amount > 100) {
+            return message.reply('you need to input a number between 2 and 100')
+        }
+
+        message.channel.bulkDelete(amount);
     }
 })
 
